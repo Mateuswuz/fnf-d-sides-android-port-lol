@@ -252,7 +252,19 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
 			}
-
+			#if android
+		if (virtualPad.buttonX.justPressed) {
+			PlayState.SONG = Song.loadFromJson('too-slow-hard', 'too-slow');
+						LoadingState.loadAndSwitchState(new PlayState(), true);
+		}
+		#end
+		}
+		if (virtualPad.buttonY.justPressed) {
+			PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
+						LoadingState.loadAndSwitchState(new PlayState(), true);
+		}
+		#end
+	    }
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] == 'donate')
