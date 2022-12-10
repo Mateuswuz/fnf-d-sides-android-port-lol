@@ -32,14 +32,16 @@ class MainMenuState extends MusicBeatState
 	private var camGame:FlxCamera;
 	private var camAchievement:FlxCamera;
 	
+	var picoo:BGSprite;
+	var bf:BGSprite;
+	var chesta:BGSprite;
+	var spoopy:BGSprite;
+	
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
-		#if windows 'mods', #end
-		#if ACHIEVEMENTS_ALLOWED 'awards', #end
-		'credits',
-		#if !switch 'donate', #end
-		'options'
+		'options',
+		'credits'
 	];
 
 	var magenta:FlxSprite;
@@ -97,6 +99,43 @@ class MainMenuState extends MusicBeatState
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		
+		menuItems = new FlxTypedGroup<FlxSprite>();
+		add(menuItems);
+		
+		//HI JACKIE OVER HERE
+		// put in the menu items like this
+		// addMenuItem(id (SHOULD BE 0, 1, 2, 3 BASED ON THE ARRAY) EX: story mode is 0, x - x value, y - y value)
+		// addMenuItem(0, 0, 0); should spawn story mode in the top left corner
+		// this was done by TK since im stupid and couldnt figure it out
+
+		addMenuItem(0, 650, 50);
+		addMenuItem(1, 950, 120);
+		addMenuItem(2, 750, 340);
+		addMenuItem(3, 950, 430);
+		
+		var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
+		add(blackfuck);
+
+		picoo = new BGSprite('mainmenu/menu_picer', -275, -150, 0.9, 0.9, ['deez pico idle'], false);
+		picoo.visible = false;
+		picoo.setGraphicSize(Std.int(picoo.width * 0.5));
+		add(picoo);
+
+		bf = new BGSprite('mainmenu/menu_bf', -275, -215, 0.9, 0.9, ['deez bf idle'], false);
+		bf.visible = false;
+		bf.setGraphicSize(Std.int(bf.width * 0.5));
+		add(bf);
+
+		spoopy = new BGSprite('mainmenu/menu_spooks', -275, -215, 0.9, 0.9, ['deez skid and pump idle'], false);
+		spoopy.visible = false;
+		spoopy.setGraphicSize(Std.int(spoopy.width * 0.5));
+		add(spoopy);
+
+		chesta = new BGSprite('mainmenu/menu_chester', -55, 75, 0.9, 0.9, ['deez chester idle'], false);
+		chesta.visible = false;
+		chesta.setGraphicSize(Std.int(chesta.width * 0.8));
+		add(chesta);
+		
 		// magenta.scrollFactor.set();
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
@@ -108,7 +147,7 @@ class MainMenuState extends MusicBeatState
 		}*/
 
 		for (i in 0...optionShit.length)
-		{
+		function addMenuItem(id:Int, x:Float, y:Float) {
 			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
 			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
 			menuItem.scale.x = scale;
@@ -117,8 +156,9 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
+			menuItem.scale.x = 0.6;
+		    menuItem.scale.y = 0.6;
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
@@ -127,6 +167,13 @@ class MainMenuState extends MusicBeatState
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
 		}
+		
+        function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
+	{
+		char1.visible = false;
+		char2.visible = false;
+		char3.visible = false;
+	}
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
@@ -157,7 +204,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
                 #if android
-                addVirtualPad(UP_DOWN, A_B);
+                addVirtualPad(UP_DOWN, A_B_X_Y);
                 #end
 
 		super.create();
@@ -270,7 +317,8 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			spr.animation.play('idle');
+			spr.updateHitbox();
 		});
 	}
 
@@ -282,6 +330,22 @@ class MainMenuState extends MusicBeatState
 			curSelected = 0;
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
+			
+		switch (optionShit[curSelected])
+        {
+            case 'story_mode':
+                removeChar(picoo, spoopy, chesta);
+                bf.visible = true;
+            case 'freeplay':
+                removeChar(bf, picoo, chesta);
+                spoopy.visible = true;
+            case 'credits':
+                removeChar(bf, picoo, spoopy);
+                chesta.visible = true;
+            case 'options':
+                removeChar(bf, chesta, spoopy);
+                picoo.visible = true;
+        }
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
