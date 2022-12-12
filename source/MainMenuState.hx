@@ -264,7 +264,7 @@ class MainMenuState extends MusicBeatState
 						LoadingState.loadAndSwitchState(new PlayState(), true);
 		}
 		#end
-	    }
+	  
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] == 'donate')
