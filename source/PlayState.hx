@@ -534,18 +534,6 @@ class PlayState extends MusicBeatState
 					add(stageCurtains);
 				}
 				dadbattleSmokes = new FlxSpriteGroup(); //troll'd
-                
-                case 'sonicstage': // mighty
-	
-				var bg = new BGSprite('TOO-SLOW/background ladders', -200, -290, 0.75, 0.75);
-				add(bg);
-				var icicles = new BGSprite('TOO-SLOW/icicles background', -121, -75, 0.85, 0.85);
-				add(icicles);
-				fakeTooSlow = new BGSprite('TOO-SLOW/main stage', -490, 6, 1, 1);
-				add(fakeTooSlow);
-				urTooSlow = new BGSprite('TOO-SLOW/main stage spoopy', -490, 6, 1, 1);
-				add(urTooSlow);
-				urTooSlow.visible=false;
 
 			case 'spooky': //Week 2
 				if(!ClientPrefs.lowQuality) {
@@ -1152,13 +1140,8 @@ class PlayState extends MusicBeatState
 		botplayTxt.borderSize = 1.25;
 		botplayTxt.visible = cpuControlled;
 		add(botplayTxt);
-		
-		var creditTxt = new FlxText(876, 648, 348);
-    creditTxt.text = "Port By Mateuzinho/nAnd Enzo Mods"; creditTxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
-    creditTxt.scrollFactor.set();
-    add(creditTxt);
 		if(ClientPrefs.downScroll) {
-			creditTxt.y = 148;
+			botplayTxt.y = timeBarBG.y - 78;
 		}
 
 		strumLineNotes.cameras = [camHUD];
@@ -4974,66 +4957,6 @@ class PlayState extends MusicBeatState
 		}
 
 		lastStepHit = curStep;
-		
-		if (SONG.song.toLowerCase()=='too-slow')
-			{
-				if(curStep > 1088 && curStep < 1210)vocals.volume = 1;
-				switch (curStep)
-					{
-						case 384:
-							FlxTween.tween(this, {barSongLength: songLength, health: 1}, 3);
-							FlxTween.tween(blackFade, {alpha: 1}, 0.45);
-							FlxTween.tween(iconP2, {alpha: 0}, 0.45);
-						case 447:
-							urTooSlow.visible = true;
-							fakeTooSlow.visible = false;
-							if (ClientPrefs.camZooms)
-							{
-							supersuperZoomShit = true;
-							}
-						case 448:
-							timeBar.createFilledBar(0x00D416E3, 0xFFD416E3);
-							timeBar.updateBar();
-							blackFade.alpha = 0;
-							iconP2.alpha = 1;
-						case 1087:
-							supersuperZoomShit = false;
-						case 1088:
-							defaultCamZoom = 1.4;
-							FlxTween.tween(camHUD, {alpha: 0}, 0.45);
-						case 1210:
-							FlxTween.tween(camHUD, {alpha: 1}, 0.45);
-						case 1344:
-							defaultCamZoom = 0.8;
-						case 1359:
-							if (ClientPrefs.camZooms)
-							{
-							supersuperZoomShit = true;
-							}
-						case 1743:
-							supersuperZoomShit = false;
-						case 1760:
-							if (ClientPrefs.camZooms)
-								{
-							defaultCamZoom = 1.0;
-								}
-						case 1765:
-							if (ClientPrefs.camZooms)
-								{
-							defaultCamZoom = 1.2;
-								}
-						case 1769:
-							if (ClientPrefs.camZooms)
-								{
-							defaultCamZoom = 1.5;
-								}
-						case 1776:
-							if (ClientPrefs.camZooms)
-								{
-							defaultCamZoom = 1.7;
-								}
-					}
-			}
 		setOnLuas('curStep', curStep);
 		callOnLuas('onStepHit', []);
 	}
