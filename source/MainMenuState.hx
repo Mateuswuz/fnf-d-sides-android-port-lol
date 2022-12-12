@@ -198,6 +198,14 @@ class MainMenuState extends MusicBeatState
 	#end
 
 	var selectedSomethin:Bool = false;
+	
+	override function beatHit(){
+		trace("beet hit");
+		chesta.dance();
+		spoopy.dance();
+		bf.dance();
+		picoo.dance();
+	}
 
 	override function update(elapsed:Float)
 	{
@@ -308,6 +316,13 @@ class MainMenuState extends MusicBeatState
 			spr.screenCenter(X);
 		});
 	}
+	
+	function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
+	{
+		char1.visible = false;
+		char2.visible = false;
+		char3.visible = false;
+	}
 
 	function changeItem(huh:Int = 0)
 	{
@@ -317,6 +332,22 @@ class MainMenuState extends MusicBeatState
 			curSelected = 0;
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
+			
+		 switch (optionShit[curSelected])
+        {
+            case 'story_mode':
+                removeChar(picoo, spoopy, chesta);
+                bf.visible = true;
+            case 'freeplay':
+                removeChar(bf, picoo, chesta);
+                spoopy.visible = true;
+            case 'credits':
+                removeChar(bf, picoo, spoopy);
+                chesta.visible = true;
+            case 'options':
+                removeChar(bf, chesta, spoopy);
+                picoo.visible = true;
+        }
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
