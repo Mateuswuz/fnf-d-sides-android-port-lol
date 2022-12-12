@@ -262,8 +262,8 @@ class MainMenuState extends MusicBeatState
 		if (virtualPad.buttonY.justPressed) {
 			PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
 						LoadingState.loadAndSwitchState(new PlayState(), true);
-		}
 		#end
+		}
 	  
 			if (controls.ACCEPT)
 			{
