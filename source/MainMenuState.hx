@@ -107,11 +107,6 @@ class MainMenuState extends MusicBeatState
 		// addMenuItem(id (SHOULD BE 0, 1, 2, 3 BASED ON THE ARRAY) EX: story mode is 0, x - x value, y - y value)
 		// addMenuItem(0, 0, 0); should spawn story mode in the top left corner
 		// this was done by TK since im stupid and couldnt figure it out
-
-		addMenuItem(0, 650, 50);
-		addMenuItem(1, 950, 120);
-		addMenuItem(2, 750, 340);
-		addMenuItem(3, 950, 430);
 		
 		var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
 		add(blackfuck);
@@ -167,13 +162,6 @@ class MainMenuState extends MusicBeatState
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
 		}
-		
-        function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
-	{
-		char1.visible = false;
-		char2.visible = false;
-		char3.visible = false;
-	}
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
@@ -220,6 +208,14 @@ class MainMenuState extends MusicBeatState
 	#end
 
 	var selectedSomethin:Bool = false;
+	
+	override function beatHit(){
+		trace("beet hit");
+		chesta.dance();
+		spoopy.dance();
+		bf.dance();
+		picoo.dance();
+	 }
 
 	override function update(elapsed:Float)
 	{
@@ -330,6 +326,13 @@ class MainMenuState extends MusicBeatState
 			spr.animation.play('idle');
 			spr.updateHitbox();
 		});
+	}
+	
+	function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
+	{
+		char1.visible = false;
+		char2.visible = false;
+		char3.visible = false;
 	}
 
 	function changeItem(huh:Int = 0)
