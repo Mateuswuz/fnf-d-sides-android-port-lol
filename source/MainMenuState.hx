@@ -40,8 +40,8 @@ class MainMenuState extends MusicBeatState
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
-		'options',
-		'credits'
+		'credits',
+		'options'
 	];
 
 	var magenta:FlxSprite;
@@ -99,18 +99,7 @@ class MainMenuState extends MusicBeatState
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		
-		//HI JACKIE OVER HERE
-		// put in the menu items like this
-		// addMenuItem(id (SHOULD BE 0, 1, 2, 3 BASED ON THE ARRAY) EX: story mode is 0, x - x value, y - y value)
-		// addMenuItem(0, 0, 0); should spawn story mode in the top left corner
-		// this was done by TK since im stupid and couldnt figure it out
-        
-        addMenuItem(0, 650, 50);
-		addMenuItem(1, 950, 120);
-		addMenuItem(2, 750, 340);
-		addMenuItem(3, 950, 430);
-		
-		var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
+	    var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
 		add(blackfuck);
 
 		picoo = new BGSprite('mainmenu/menu_picer', -275, -150, 0.9, 0.9, ['deez pico idle'], false);
@@ -134,7 +123,7 @@ class MainMenuState extends MusicBeatState
 		add(chesta);
 		
 		// magenta.scrollFactor.set();
-		
+
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
@@ -144,18 +133,18 @@ class MainMenuState extends MusicBeatState
 		}*/
 
 		for (i in 0...optionShit.length)
-		function addMenuItem(id:Int, x:Float, y:Float) {
-			menuItem = new FlxSprite(x, y);
-		    menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[id]);
-		    menuItem.animation.addByPrefix('idle', optionShit[id] + " basic", 24);
-		    menuItem.animation.addByPrefix('selected', optionShit[id] + " white", 24);
-		    menuItem.animation.play('idle');
-		    menuItem.scale.x = 0.6;
-		    menuItem.scale.y = 0.6;
-		    menuItem.ID = id;
-		    menuItems.add(menuItem);
-		    menuItem.antialiasing = ClientPrefs.globalAntialiasing;
-		    menuItem.updateHitbox();
+		{
+			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
+			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
+			menuItem.scale.x = scale;
+			menuItem.scale.y = scale;
+			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[i]);
+			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
+			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
+			menuItem.animation.play('idle');
+			menuItem.ID = i;
+			menuItem.screenCenter(X);
+			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
 			menuItem.scrollFactor.set(0, scr);
@@ -209,14 +198,6 @@ class MainMenuState extends MusicBeatState
 	#end
 
 	var selectedSomethin:Bool = false;
-	
-	override function beatHit(){
-		trace("beet hit");
-		chesta.dance();
-		spoopy.dance();
-		bf.dance();
-		picoo.dance();
-	 }
 
 	override function update(elapsed:Float)
 	{
@@ -260,7 +241,7 @@ class MainMenuState extends MusicBeatState
 			PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
 						LoadingState.loadAndSwitchState(new PlayState(), true);
 		}
-	  
+
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] == 'donate')
@@ -319,21 +300,14 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
+		}
 
 		super.update(elapsed);
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.animation.play('idle');
-			spr.updateHitbox();
+			spr.screenCenter(X);
 		});
-	}
-	
-	function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
-	{
-		char1.visible = false;
-		char2.visible = false;
-		char3.visible = false;
 	}
 
 	function changeItem(huh:Int = 0)
@@ -344,22 +318,6 @@ class MainMenuState extends MusicBeatState
 			curSelected = 0;
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
-			
-		switch (optionShit[curSelected])
-        {
-            case 'story_mode':
-                removeChar(picoo, spoopy, chesta);
-                bf.visible = true;
-            case 'freeplay':
-                removeChar(bf, picoo, chesta);
-                spoopy.visible = true;
-            case 'credits':
-                removeChar(bf, picoo, spoopy);
-                chesta.visible = true;
-            case 'options':
-                removeChar(bf, chesta, spoopy);
-                picoo.visible = true;
-        }
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
