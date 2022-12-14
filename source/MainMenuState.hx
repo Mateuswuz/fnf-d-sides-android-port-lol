@@ -310,7 +310,6 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
-		}
 
 		super.update(elapsed);
 		
