@@ -154,13 +154,6 @@ class MainMenuState extends MusicBeatState
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
 		}
-		
-		function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
-	{
-		char1.visible = false;
-		char2.visible = false;
-		char3.visible = false;
-	}
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
@@ -324,6 +317,13 @@ class MainMenuState extends MusicBeatState
 		{
 			spr.screenCenter(X);
 		});
+	}
+	
+	function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
+	{
+		char1.visible = false;
+		char2.visible = false;
+		char3.visible = false;
 	}
 
 	function changeItem(huh:Int = 0)
