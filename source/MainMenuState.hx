@@ -134,7 +134,7 @@ class MainMenuState extends MusicBeatState
 
 		idk = new Character(800, -130, 'crie uma json do seu presonagem lol', true); //o (800, -130) e a posiçao lol
 		idk.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
-		add(idk)
+		add(idk);
 		idk.visible = false;
 
 
