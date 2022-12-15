@@ -32,11 +32,6 @@ class MainMenuState extends MusicBeatState
 	private var camGame:FlxCamera;
 	private var camAchievement:FlxCamera;
 	
-	var picoo:BGSprite;
-	var bf:BGSprite;
-	var chesta:BGSprite;
-	var spoopy:BGSprite;
-	
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
@@ -47,6 +42,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
+	private var idk:Character = null;
 	var debugKeys:Array<FlxKey>;
 
 	override function create()
@@ -108,29 +104,6 @@ class MainMenuState extends MusicBeatState
 		/*if(optionShit.length > 6) {
 			scale = 6 / optionShit.length;
 		}*/
-		
-		var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
-		add(blackfuck);
-
-		picoo = new BGSprite('mainmenu/menu_picer', -275, -150, 0.9, 0.9, ['deez pico idle'], false);
-		picoo.visible = false;
-		picoo.setGraphicSize(Std.int(picoo.width * 0.5));
-		add(picoo);
-
-		bf = new BGSprite('mainmenu/menu_bf', -275, -215, 0.9, 0.9, ['deez bf idle'], false);
-		bf.visible = false;
-		bf.setGraphicSize(Std.int(bf.width * 0.5));
-		add(bf);
-
-		spoopy = new BGSprite('mainmenu/menu_spooks', -275, -215, 0.9, 0.9, ['deez skid and pump idle'], false);
-		spoopy.visible = false;
-		spoopy.setGraphicSize(Std.int(spoopy.width * 0.5));
-		add(spoopy);
-
-		chesta = new BGSprite('mainmenu/menu_chester', -55, 75, 0.9, 0.9, ['deez chester idle'], false);
-		chesta.visible = false;
-		chesta.setGraphicSize(Std.int(chesta.width * 0.8));
-		add(chesta);
 
 		for (i in 0...optionShit.length)
 		{
@@ -142,10 +115,9 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
-			menuItem.scale.x = 0.6;
-		    menuItem.scale.y = 0.6;
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
+			//menuItem.screenCenter(X); mesmo lol (pra n ficar no meio)
+			menuItem.x = 100;
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
@@ -156,6 +128,12 @@ class MainMenuState extends MusicBeatState
 		}
 
 		FlxG.camera.follow(camFollowPos, null, 1);
+
+		idk = new Character(800, -130, 'crie uma json do seu presonagem lol', true); //o (800, -130) e a posiçao lol
+		idk.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
+		add(idk)
+		idk.visible = false
+
 
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
@@ -200,14 +178,6 @@ class MainMenuState extends MusicBeatState
 	#end
 
 	var selectedSomethin:Bool = false;
-	
-	override function beatHit(){
-		trace("beet hit");
-		chesta.dance();
-		spoopy.dance();
-		bf.dance();
-		picoo.dance();
-	}
 
 	override function update(elapsed:Float)
 	{
@@ -217,8 +187,52 @@ class MainMenuState extends MusicBeatState
 			if(FreeplayState.vocals != null) FreeplayState.vocals.volume += 0.5 * elapsed;
 		}
 
-		var lerpVal:Float = CoolUtil.boundTo(elapsed * 7.5, 0, 1);
-		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
+		if (optionShit[curSelected] == 'story_mode') //so copiar esse code e subistuir iqual da linha 36 que fica os botoes lol
+		{
+			changeItem(-1);
+			changeItem(1);
+
+			idk.dance()
+			idk.updateHitbox();
+			idk.visible = true;
+		}
+		else
+		{
+			idk.visible = false;
+		}
+		
+		if (optionShit[curSelected] == 'freeplay')
+        {
+         idk.visible = false;
+            changeItem(-1);
+            changeItem(1);
+
+            idk2.dance()
+            idk2.updateHitbox();
+            idk2.visible = true;
+        }
+        
+        if (optionShit[curSelected] == 'credits')
+        {
+         idk2.visible = false;
+            changeItem(-1);
+            changeItem(1);
+
+            idk3.dance()
+            idk3.updateHitbox();
+            idk3.visible = true;
+        }
+        
+        if (optionShit[curSelected] == 'options')
+        {
+         idk3.visible = false;
+            changeItem(-1);
+            changeItem(1);
+
+            idk4.dance()
+            idk4.updateHitbox();
+            idk4.visible = true;
+        }
 
 		if (!selectedSomethin)
 		{
@@ -310,20 +324,14 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
+		}
 
 		super.update(elapsed);
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			//spr.screenCenter(X); pra nao ficar no meio lol (eu tirei lol)
 		});
-	}
-	
-	function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
-	{
-		char1.visible = false;
-		char2.visible = false;
-		char3.visible = false;
 	}
 
 	function changeItem(huh:Int = 0)
@@ -334,22 +342,6 @@ class MainMenuState extends MusicBeatState
 			curSelected = 0;
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
-			
-			switch (optionShit[curSelected])
-        {
-            case 'story_mode':
-                removeChar(picoo, spoopy, chesta);
-                bf.visible = true;
-            case 'freeplay':
-                removeChar(bf, picoo, chesta);
-                spoopy.visible = true;
-            case 'credits':
-                removeChar(bf, picoo, spoopy);
-                chesta.visible = true;
-            case 'options':
-                removeChar(bf, chesta, spoopy);
-                picoo.visible = true;
-        }
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
