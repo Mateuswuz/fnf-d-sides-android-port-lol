@@ -104,6 +104,9 @@ class MainMenuState extends MusicBeatState
 		/*if(optionShit.length > 6) {
 			scale = 6 / optionShit.length;
 		}*/
+		
+		var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
+		add(blackfuck);
 
 		for (i in 0...optionShit.length)
 		{
