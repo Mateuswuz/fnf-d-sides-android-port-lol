@@ -195,7 +195,7 @@ class MainMenuState extends MusicBeatState
 			changeItem(-1);
 			changeItem(1);
 
-			idk.dance()
+			idk.dance();
 			idk.updateHitbox();
 			idk.visible = true;
 		}
@@ -210,7 +210,7 @@ class MainMenuState extends MusicBeatState
             changeItem(-1);
             changeItem(1);
 
-            idk2.dance()
+            idk2.dance();
             idk2.updateHitbox();
             idk2.visible = true;
         }
@@ -221,7 +221,7 @@ class MainMenuState extends MusicBeatState
             changeItem(-1);
             changeItem(1);
 
-            idk3.dance()
+            idk3.dance();
             idk3.updateHitbox();
             idk3.visible = true;
         }
@@ -232,7 +232,7 @@ class MainMenuState extends MusicBeatState
             changeItem(-1);
             changeItem(1);
 
-            idk4.dance()
+            idk4.dance();
             idk4.updateHitbox();
             idk4.visible = true;
         }
