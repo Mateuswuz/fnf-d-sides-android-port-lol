@@ -135,7 +135,7 @@ class MainMenuState extends MusicBeatState
 		idk = new Character(800, -130, 'crie uma json do seu presonagem lol', true); //o (800, -130) e a posiçao lol
 		idk.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
 		add(idk)
-		idk.visible = false
+		idk.visible = false;
 
 
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
