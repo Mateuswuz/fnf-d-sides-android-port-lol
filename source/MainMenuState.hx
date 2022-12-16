@@ -75,7 +75,7 @@ class MainMenuState extends MusicBeatState
 		persistentUpdate = persistentDraw = true;
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBGWithBlackFuck'));
 		bg.scrollFactor.set(0, yScroll);
 		bg.setGraphicSize(Std.int(bg.width * 1.175));
 		bg.updateHitbox();
@@ -88,7 +88,7 @@ class MainMenuState extends MusicBeatState
 		add(camFollow);
 		add(camFollowPos);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesatWithBlackFuck'));
 		magenta.scrollFactor.set(0, yScroll);
 		magenta.setGraphicSize(Std.int(magenta.width * 1.175));
 		magenta.updateHitbox();
@@ -107,9 +107,6 @@ class MainMenuState extends MusicBeatState
 		/*if(optionShit.length > 6) {
 			scale = 6 / optionShit.length;
 		}*/
-		
-		var blackfuck:BGSprite = new BGSprite('mainmenu/blackfuck', -250, 0, 0.9, 0.9);
-		add(blackfuck);
 
 		for (i in 0...optionShit.length)
 		{
@@ -135,10 +132,25 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
-		idk = new Character(800, -130, 'crie uma json do seu presonagem lol', true); //o (800, -130) e a posiçao lol
+		idk = new Character(800, -130, 'menu_bf', true); //o (800, -130) e a posiçao lol
 		idk.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
 		add(idk);
 		idk.visible = false;
+		
+		idk2 = new Character(800, -130, 'menu_chester', true); //o (800, -130) e a posiçao lol
+		idk2.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
+		add(idk2);
+		idk2.visible = false;
+		
+		idk3 = new Character(800, -130, 'menu_picer', true); //o (800, -130) e a posiçao lol
+		idk3.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
+		add(idk3);
+		idk3.visible = false;
+		
+		idk4 = new Character(800, -130, 'menu_spooks', true); //o (800, -130) e a posiçao lol
+		idk4.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
+		add(idk4);
+		idk4.visible = false;
 
 
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
