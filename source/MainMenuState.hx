@@ -42,7 +42,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
-	private var idk:Character = null;
+	private var idk:Character = null; //personagems no menu incrivel ne lol
 	private var idk2:Character = null;
 	private var idk3:Character = null;
 	private var idk4:Character = null;
@@ -57,7 +57,7 @@ class MainMenuState extends MusicBeatState
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("In the Menus", null); //idk pq isso n aparece no android lmao
 		#end
 		debugKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 
@@ -178,11 +178,9 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 		#end
-
-                #if android
-                addVirtualPad(UP_DOWN, A_B_X_Y);
-                #end
-
+		#if android
+		addVirtualPad(UP_DOWN, A_B_X_Y);
+		#end
 		super.create();
 	}
 
@@ -221,7 +219,6 @@ class MainMenuState extends MusicBeatState
 		
 		if (optionShit[curSelected] == 'freeplay')
         {
-         idk.visible = false;
             changeItem(-1);
             changeItem(1);
 
@@ -229,10 +226,13 @@ class MainMenuState extends MusicBeatState
             idk2.updateHitbox();
             idk2.visible = true;
         }
+		else
+		{
+			idk2.visible = false;
+		}
         
         if (optionShit[curSelected] == 'credits')
         {
-         idk2.visible = false;
             changeItem(-1);
             changeItem(1);
 
@@ -240,10 +240,13 @@ class MainMenuState extends MusicBeatState
             idk3.updateHitbox();
             idk3.visible = true;
         }
+		else
+		{
+			idk3.visible = false;
+		}
         
         if (optionShit[curSelected] == 'options')
         {
-         idk3.visible = false;
             changeItem(-1);
             changeItem(1);
 
@@ -251,6 +254,10 @@ class MainMenuState extends MusicBeatState
             idk4.updateHitbox();
             idk4.visible = true;
         }
+		else
+		{
+			idk4.visible = false;
+		}
 
 		if (!selectedSomethin)
 		{
@@ -272,17 +279,19 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
 			}
+
 			#if android
-		if (virtualPad.buttonX.justPressed) {
-			PlayState.SONG = Song.loadFromJson('too-slow-hard', 'too-slow');
-						LoadingState.loadAndSwitchState(new PlayState(), true);
-		}
-		#end
-		}
-		if (virtualPad.buttonY.justPressed) {
-			PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
-						LoadingState.loadAndSwitchState(new PlayState(), true);
-		}
+			if (virtualPad.buttonX.justPressed) {
+				PlayState.SONG = Song.loadFromJson('too-slow-hard', 'too-slow');
+				LoadingState.loadAndSwitchState(new PlayState(), true);
+			}
+			
+			}
+			if (virtualPad.buttonY.justPressed) {
+				PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
+				LoadingState.loadAndSwitchState(new PlayState(), true);
+			}
+			#end
 
 			if (controls.ACCEPT)
 			{
