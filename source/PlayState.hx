@@ -4470,6 +4470,7 @@ class PlayState extends MusicBeatState
 		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
 	}
   });
+ }
 
 	private function onKeyRelease(event:KeyboardEvent):Void
        }
