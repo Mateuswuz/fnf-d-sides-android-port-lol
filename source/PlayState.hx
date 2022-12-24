@@ -4472,7 +4472,7 @@ class PlayState extends MusicBeatState
   }
 
 	private function onKeyRelease(event:KeyboardEvent):Void
-       }
+       };
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
 		if(!cpuControlled && startedCountdown && !paused && key > -1)
