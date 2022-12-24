@@ -13,7 +13,7 @@
 		}
 	],
 	"no_antialiasing": false,
-	"image": "mainmenu/menu_spooks",
+	"image": "characters/menu_spooks",
 	"position": [
 		0,
 		0
