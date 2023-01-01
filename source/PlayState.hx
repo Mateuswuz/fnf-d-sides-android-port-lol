@@ -154,13 +154,6 @@ class PlayState extends MusicBeatState
 	public var dad:Character = null;
 	public var gf:Character = null;
 	public var boyfriend:Boyfriend = null;
-	
-	// exe stuff
-    public var frozenBF:FlxSprite;
-    var leftIndicator:FlxSprite;
-	var rightIndicator:FlxSprite;
-	var indicatorTween:FlxTween;
-	var frozenIndicators:FlxSpriteGroup;
 
 	public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
@@ -265,9 +258,6 @@ class PlayState extends MusicBeatState
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 	var bgGhouls:BGSprite;
-	
-	var freezeCounter:Int = 0; // used for Ice Notes
-	var maxFreeze:Int = 4;
 
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
@@ -861,44 +851,6 @@ class PlayState extends MusicBeatState
 
 		add(dadGroup);
 		add(boyfriendGroup);
-		
-		//bf frozen lol
-        frozenBF = new FlxSprite(BF_X,BF_Y);
-		frozenBF.frames = Paths.getSparrowAtlas("snowgrave");
-		frozenBF.animation.addByPrefix("idle","Idle_Frozen",24);
-		frozenBF.animation.addByPrefix("0","1",24,false);
-		frozenBF.animation.addByPrefix("1","2",24,false);
-		frozenBF.animation.addByPrefix("2","3",24,false);
-		frozenBF.animation.addByPrefix("3","4",24,false);
-		frozenBF.animation.addByPrefix("4","4",24,false); // breakout anim
-		frozenBF.antialiasing=true;
-		frozenBF.visible=false;
-		frozenBF.scrollFactor.set(0.95, 0.95);
-		frozenBF.animation.play("idle",true);
-		frozenBF.centerOffsets();
-		add(frozenBF);
-		frozenIndicators = new FlxSpriteGroup(FlxG.width/2 - 100, FlxG.height/2 - 100);
-		frozenIndicators.alpha=0;
-		frozenIndicators.cameras = [camOther];
-		leftIndicator = new FlxSprite(-150,0);
-		//leftIndicator.scrollFactor.set(0.95,0.95);
-		leftIndicator.frames = Paths.getSparrowAtlas("NOTE_ASSETS");
-		leftIndicator.animation.addByPrefix('hit','purple0',24,false);
-		leftIndicator.animation.addByPrefix('idle','arrowLEFT',24,false);
-		leftIndicator.animation.play("idle",true);
-		leftIndicator.antialiasing=true;
-		leftIndicator.setGraphicSize(Std.int(leftIndicator.width*.75));
-		frozenIndicators.add(leftIndicator);
-
-		rightIndicator = new FlxSprite(150,0);
-		//rightIndicator.scrollFactor.set(0.95,0.95);
-		rightIndicator.frames = Paths.getSparrowAtlas("NOTE_ASSETS");
-		rightIndicator.animation.addByPrefix('hit','red0',24,false);
-		rightIndicator.animation.addByPrefix('idle','arrowRIGHT',24,false);
-		rightIndicator.animation.play("idle",true);
-		rightIndicator.antialiasing=true;
-		rightIndicator.setGraphicSize(Std.int(leftIndicator.width*.75));
-		frozenIndicators.add(rightIndicator);
 
 		switch(curStage)
 		{
@@ -1190,11 +1142,11 @@ class PlayState extends MusicBeatState
 		add(botplayTxt);
 		
 		var creditTxt = new FlxText(876, 648, 348);
-    creditTxt.text = "Port By Enzo Mods/nAnd Mateuzinho"; creditTxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+    creditTxt.text = "Port By Enzo and Mateuzinho"; creditTxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
     creditTxt.scrollFactor.set();
     add(creditTxt);
 		if(ClientPrefs.downScroll) {
-			creditTxt.y = 148;
+			botplayTxt.y = timeBarBG.y - 78;
 		}
 
 		strumLineNotes.cameras = [camHUD];
@@ -1246,9 +1198,6 @@ class PlayState extends MusicBeatState
 		noteTypeMap = null;
 		eventPushedMap.clear();
 		eventPushedMap = null;
-		
-		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
-		// add(strumLine);
 
 		// SONG SPECIFIC SCRIPTS
     #if (LUA_ALLOWED)
@@ -2880,10 +2829,6 @@ class PlayState extends MusicBeatState
 		{
 			iconP1.swapOldIcon();
 		}*/
-		
-		frozenBF.x = boyfriend.x - 100;
-		frozenBF.y = boyfriend.y - 100;
-
 		callOnLuas('onUpdate', [elapsed]);
 
 		switch (curStage)
@@ -3169,32 +3114,6 @@ class PlayState extends MusicBeatState
 				var index:Int = unspawnNotes.indexOf(dunceNote);
 				unspawnNotes.splice(index, 1);
 			}
-		}
-		
-		if(noteTypeMap.exists("Ice Note")){
-			opponentStrums.forEachAlive( function(strum:StrumNote){
-				if(freezeCounter>0){
-					if(strum.alphaM>.5)
-						strum.alphaM-=elapsed*5;
-					if(strum.alphaM<=.5)strum.alphaM=.5;
-				}else{
-					if(strum.alphaM<1)
-						strum.alphaM+=elapsed*5;
-					if(strum.alphaM>=1)strum.alphaM=1;
-				}
-			});
-
-			playerStrums.forEachAlive( function(strum:StrumNote){
-				if(freezeCounter>0){
-					if(strum.alphaM>.5)
-						strum.alphaM-=elapsed*5;
-					if(strum.alphaM<=.5)strum.alphaM=.5;
-				}else{
-					if(strum.alphaM<1)
-						strum.alphaM+=elapsed*5;
-					if(strum.alphaM>=1)strum.alphaM=1;
-				}
-			});
 		}
 
 		if (generatedMusic && !inCutscene)
@@ -4348,48 +4267,13 @@ class PlayState extends MusicBeatState
 
 		if (!cpuControlled && startedCountdown && !paused && key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
 		{
-			if(freezeCounter>0){
-				var keyToPress = 3*(freezeCounter-1)%2; // left then right
-				trace(keyToPress);
-				if(key==keyToPress){
-					FlxG.sound.play(Paths.sound("struggle"),0.75);
-					freezeCounter--;
+			if(!boyfriend.stunned && generatedMusic && !endingSong)
+			{
+				//more accurate hit time for the ratings?
+				var lastTime:Float = Conductor.songPosition;
+				Conductor.songPosition = FlxG.sound.music.time;
 
-					var shit = Math.floor(((maxFreeze-freezeCounter)/maxFreeze)*4);
-					frozenBF.animation.play('${shit}', true);
-					var nextKey = 3*(freezeCounter-1)%2; // left then right
-					if(nextKey==3){
-						rightIndicator.animation.play("hit",true);
-						leftIndicator.animation.play("idle",true);
-					}else{
-						rightIndicator.animation.play("idle",true);
-						leftIndicator.animation.play("hit",true);
-					}
-				}
-
-				if(freezeCounter==0){
-					if(indicatorTween!=null)indicatorTween.cancel();
-					indicatorTween = FlxTween.tween(frozenIndicators, {alpha: 0}, 0.25, {ease: FlxEase.quadInOut,
-						onComplete: function(twn:FlxTween) {
-							indicatorTween = null;
-						}
-					});
-					FlxG.sound.play(Paths.sound("breakout"),1);
-					frozenBF.visible=false;
-					boyfriend.visible=true;
-					boyfriend.playAnim("hey",true);
-					boyfriend.specialAnim = true;
-					boyfriend.heyTimer = 0.6;
-				}
-			}
-			if(freezeCounter<=0){
-				if(!boyfriend.stunned && generatedMusic && !endingSong)
-				{
-					//more accurate hit time for the ratings?
-					var lastTime:Float = Conductor.songPosition;
-					Conductor.songPosition = FlxG.sound.music.time;
-
-				    var canMiss:Bool = !ClientPrefs.ghostTapping;
+				var canMiss:Bool = !ClientPrefs.ghostTapping;
 
 				// heavily based on my own code LOL if it aint broke dont fix it
 				var pressNotes:Array<Note> = [];
@@ -4469,11 +4353,9 @@ class PlayState extends MusicBeatState
 
 		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
 	}
-  });
- }
 
 	private function onKeyRelease(event:KeyboardEvent):Void
-       }
+	{
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
 		if(!cpuControlled && startedCountdown && !paused && key > -1)
@@ -4528,12 +4410,11 @@ class PlayState extends MusicBeatState
 		}
 
 		// FlxG.watch.addQuick('asdfa', upP);
-		if (if (!boyfriend.stunned && generatedMusic)
+		if (startedCountdown && !boyfriend.stunned && generatedMusic)
 		{
 			// rewritten inputs???
-			if(freezeCounter<=0){
-				notes.forEachAlive(function(daNote:Note)
-				{
+			notes.forEachAlive(function(daNote:Note)
+			{
 				// hold note functions
 				if (strumsBlocked[daNote.noteData] != true && daNote.isSustainNote && parsedHoldArray[daNote.noteData] && daNote.canBeHit
 				&& daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit && !daNote.blockHit) {
@@ -4589,28 +4470,9 @@ class PlayState extends MusicBeatState
 				notes.remove(note, true);
 				note.destroy();
 			}
-		    return;
-			}else{
-				switch(note.noteType){
-					case 'Ice Note':
-						combo = 0;
-						if(indicatorTween!=null)indicatorTween.cancel();
-						indicatorTween = FlxTween.tween(frozenIndicators, {alpha: 1}, 0.25, {ease: FlxEase.quadInOut,
-							onComplete: function(twn:FlxTween) {
-								indicatorTween = null;
-							}
-						});
-						rightIndicator.animation.play("idle",true);
-						leftIndicator.animation.play("hit",true);
-						freezeCounter = maxFreeze+1;
-						FlxG.sound.play(Paths.sound("hitIce"),1);
-						frozenBF.animation.play("idle",true);
-						frozenBF.visible=true;
-						boyfriend.visible=false;
-						note.wasGoodHit = true;
-						}
-		                combo = 0;
-		                health -= daNote.missHealth * healthLoss;
+		});
+		combo = 0;
+		health -= daNote.missHealth * healthLoss;
 		
 		if(instakillOnMiss)
 		{

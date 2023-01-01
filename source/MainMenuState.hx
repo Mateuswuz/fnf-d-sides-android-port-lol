@@ -40,12 +40,14 @@ class MainMenuState extends MusicBeatState
 	];
 
 	var magenta:FlxSprite;
+	var menuItem:FlxSprite;
+	var blackfuck:FlxSprite;
+	var bf:FlxSprite;
+	var spoopy:FlxSprite;
+	var chesta:FlxSprite;
+	var picoo:FlxSprite;
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
-	private var idk:Character = null; //personagems no menu incrivel ne lol
-	private var idk2:Character = null;
-	private var idk3:Character = null;
-	private var idk4:Character = null;
 	var debugKeys:Array<FlxKey>;
 
 	override function create()
@@ -57,7 +59,7 @@ class MainMenuState extends MusicBeatState
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null); //idk pq isso n aparece no android lmao
+		DiscordClient.changePresence("In the Menus", null);
 		#end
 		debugKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 
@@ -75,7 +77,7 @@ class MainMenuState extends MusicBeatState
 		persistentUpdate = persistentDraw = true;
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBGWithBlackFuck'));
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 		bg.scrollFactor.set(0, yScroll);
 		bg.setGraphicSize(Std.int(bg.width * 1.175));
 		bg.updateHitbox();
@@ -88,7 +90,7 @@ class MainMenuState extends MusicBeatState
 		add(camFollow);
 		add(camFollowPos);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesatWithBlackFuck'));
+		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
 		magenta.scrollFactor.set(0, yScroll);
 		magenta.setGraphicSize(Std.int(magenta.width * 1.175));
 		magenta.updateHitbox();
@@ -107,20 +109,67 @@ class MainMenuState extends MusicBeatState
 		/*if(optionShit.length > 6) {
 			scale = 6 / optionShit.length;
 		}*/
+		
+		addMenuItem(0, 650, 50);
+		addMenuItem(1, 950, 120);
+		addMenuItem(2, 750, 340);
+		addMenuItem(3, 950, 430);
+		
+		blackfuck = new FlxSprite(-250, 0).loadGraphic(Paths.image('mainmenu/blackfuck')); 
+		blackfuck = Paths.getSparrowAtlas('mainmenu/blackfuck');
+		add(blackfuck);
+		
+		bf = new FlxSprite(-275, -215).loadGraphic(Paths.image('mainmenu/menu_bf')); 
+		bf = Paths.getSparrowAtlas('mainmenu/menu_bf');
+		bf.animation.addByPrefix('idle', "deez bf idle", 24);
+		bf.animation.play('idle');
+		bf.visible = false;
+		bf.antialiasing = ClientPrefs.globalAntialiasing;
+		bf.setGraphicSize(Std.int(logo.width * 0.4));
+		add(bf);
+		
+		spoopy = new FlxSprite(-275, -215).loadGraphic(Paths.image('mainmenu/menu_spooks')); 
+		spoopy = Paths.getSparrowAtlas('mainmenu/menu_spooks');
+		spoopy.animation.addByPrefix('idle', "deez skid and pump idle", 24);
+		spoopy.animation.play('idle');
+		spoopy.visible = false;
+		spoopy.antialiasing = ClientPrefs.globalAntialiasing;
+		spoopy.setGraphicSize(Std.int(logo.width * 0.4));
+		add(spoopy);
+		
+		chesta = new FlxSprite(-275, -215).loadGraphic(Paths.image('mainmenu/menu_chester')); 
+		chesta = Paths.getSparrowAtlas('mainmenu/menu_chester');
+		chesta.animation.addByPrefix('idle', "deez chester idle", 24);
+		chesta.animation.play('idle');
+		chesta.visible = false;
+		chesta.antialiasing = ClientPrefs.globalAntialiasing;
+		chesta.setGraphicSize(Std.int(logo.width * 0.4));
+		add(chesta);
+		
+		picoo = new FlxSprite(-275, -215).loadGraphic(Paths.image('mainmenu/menu_picer')); 
+		picoo = Paths.getSparrowAtlas('mainmenu/menu_picer');
+		picoo.animation.addByPrefix('idle', "deez pico idle", 24);
+		picoo.animation.play('idle');
+		picoo.visible = false;
+		picoo.antialiasing = ClientPrefs.globalAntialiasing;
+		picoo.setGraphicSize(Std.int(logo.width * 0.4));
+		add(picoo);
 
 		for (i in 0...optionShit.length)
-		{
+		function addMenuItem(id:Int, x:Float, y:Float) {
 			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
 			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
+			menuItem = new FlxSprite(x, y);
 			menuItem.scale.x = scale;
 			menuItem.scale.y = scale;
 			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[i]);
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
+			menuItem.scale.x = 0.6;
+		    menuItem.scale.y = 0.6;
 			menuItem.ID = i;
-			//menuItem.screenCenter(X); mesmo lol (pra n ficar no meio)
-			menuItem.x = 100;
+			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
@@ -131,27 +180,6 @@ class MainMenuState extends MusicBeatState
 		}
 
 		FlxG.camera.follow(camFollowPos, null, 1);
-
-		idk = new Character(800, -130, 'menu_bf', true); //o (800, -130) e a posiçao lol
-		idk.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
-		add(idk);
-		idk.visible = false;
-		
-		idk2 = new Character(800, -130, 'menu_chester', true); //o (800, -130) e a posiçao lol
-		idk2.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
-		add(idk2);
-		idk2.visible = false;
-		
-		idk3 = new Character(800, -130, 'menu_picer', true); //o (800, -130) e a posiçao lol
-		idk3.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
-		add(idk3);
-		idk3.visible = false;
-		
-		idk4 = new Character(800, -130, 'menu_spooks', true); //o (800, -130) e a posiçao lol
-		idk4.setGraphicSize(Std.int(idk.width * 0.8)); //TAMANHO LOLOLOl
-		add(idk4);
-		idk4.visible = false;
-
 
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
@@ -178,9 +206,11 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 		#end
-		#if android
-		addVirtualPad(UP_DOWN, A_B_X_Y);
-		#end
+
+                #if android
+                addVirtualPad(UP_DOWN, A_B_X_Y);
+                #end
+
 		super.create();
 	}
 
@@ -203,61 +233,8 @@ class MainMenuState extends MusicBeatState
 			if(FreeplayState.vocals != null) FreeplayState.vocals.volume += 0.5 * elapsed;
 		}
 
-		if (optionShit[curSelected] == 'story_mode') //so copiar esse code e subistuir iqual da linha 36 que fica os botoes lol
-		{
-			changeItem(-1);
-			changeItem(1);
-
-			idk.dance();
-			idk.updateHitbox();
-			idk.visible = true;
-		}
-		else
-		{
-			idk.visible = false;
-		}
-		
-		if (optionShit[curSelected] == 'freeplay')
-        {
-            changeItem(-1);
-            changeItem(1);
-
-            idk2.dance();
-            idk2.updateHitbox();
-            idk2.visible = true;
-        }
-		else
-		{
-			idk2.visible = false;
-		}
-        
-        if (optionShit[curSelected] == 'credits')
-        {
-            changeItem(-1);
-            changeItem(1);
-
-            idk3.dance();
-            idk3.updateHitbox();
-            idk3.visible = true;
-        }
-		else
-		{
-			idk3.visible = false;
-		}
-        
-        if (optionShit[curSelected] == 'options')
-        {
-            changeItem(-1);
-            changeItem(1);
-
-            idk4.dance();
-            idk4.updateHitbox();
-            idk4.visible = true;
-        }
-		else
-		{
-			idk4.visible = false;
-		}
+		var lerpVal:Float = CoolUtil.boundTo(elapsed * 7.5, 0, 1);
+		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 
 		if (!selectedSomethin)
 		{
@@ -279,20 +256,19 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
 			}
-
+			
 			#if android
 			if (virtualPad.buttonX.justPressed) {
 				PlayState.SONG = Song.loadFromJson('too-slow-hard', 'too-slow');
 				LoadingState.loadAndSwitchState(new PlayState(), true);
 			}
-			
+			#end
 			}
 			if (virtualPad.buttonY.justPressed) {
 				PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
 				LoadingState.loadAndSwitchState(new PlayState(), true);
 			}
 			#end
-
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] == 'donate')
@@ -351,13 +327,21 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());
 			}
+		}
 
 		super.update(elapsed);
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			//spr.screenCenter(X); pra nao ficar no meio lol (eu tirei lol)
+			spr.screenCenter(X);
 		});
+	}
+	
+	function removeChar(char1:FlxSprite, char2:FlxSprite, char3:FlxSprite)
+	{
+		char1.visible = false;
+		char2.visible = false;
+		char3.visible = false;
 	}
 
 	function changeItem(huh:Int = 0)
@@ -368,6 +352,22 @@ class MainMenuState extends MusicBeatState
 			curSelected = 0;
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
+			
+			switch (optionShit[curSelected])
+        {
+            case 'story_mode':
+                removeChar(picoo, spoopy, chesta);
+                bf.visible = true;
+            case 'freeplay':
+                removeChar(bf, picoo, chesta);
+                spoopy.visible = true;
+            case 'credits':
+                removeChar(bf, picoo, spoopy);
+                chesta.visible = true;
+            case 'options':
+                removeChar(bf, chesta, spoopy);
+                picoo.visible = true;
+        }
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
