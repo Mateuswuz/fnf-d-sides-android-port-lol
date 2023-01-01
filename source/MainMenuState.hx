@@ -268,7 +268,7 @@ class MainMenuState extends MusicBeatState
 				PlayState.SONG = Song.loadFromJson('cycles-hard', 'cycles');
 				LoadingState.loadAndSwitchState(new PlayState(), true);
 			}
-			#end
+		
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] == 'donate')
